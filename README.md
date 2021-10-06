@@ -10,3 +10,5 @@
     }
 }'></button>
 ```
+
+in contrast to be-transformed -- which uses capture, and transform is only inside that element.
