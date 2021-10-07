@@ -1,8 +1,28 @@
 {
   "name": "be-transformative",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "keywords": [
+    "web-components",
+    "web-component",
+    "custom-element",
+    "custom-elements",
+    "JSON",
+    "bind",
+    "notify",
+    "transform"
+  ],
+  "description": "Transform DOM on demand.",
+  "main": "be-transformative.js",
+  "module": "be-transformative.js",
+  "exports":{
+    ".": "./be-transformative.js",
+    "./be-transformative.js": "./be-transformative.js"
+  },
+  "files":[
+    "be*.*",
+    "types.d.ts"
+  ],
+  "types": "types.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "package-check": "package-check",
