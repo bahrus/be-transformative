@@ -1,6 +1,6 @@
 {
   "name": "be-transformative",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "keywords": [
     "web-components",
     "web-component",
@@ -14,11 +14,11 @@
   "description": "Transform DOM on demand.",
   "main": "be-transformative.js",
   "module": "be-transformative.js",
-  "exports":{
+  "exports": {
     ".": "./be-transformative.js",
     "./be-transformative.js": "./be-transformative.js"
   },
-  "files":[
+  "files": [
     "be*.*",
     "types.d.ts"
   ],
