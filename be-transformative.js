@@ -65,11 +65,35 @@ const ce = new CE({
                         host.lastEvent = hostLastEvent;
                     }
                 };
+                self.addEventListener(propKey, fn);
+                if (self.eventHandlers === undefined)
+                    self.eventHandlers = [];
+                self.eventHandlers.push({ propKey, element: self, fn });
+                nudge(self);
             }
+        },
+        finale: (self, target) => {
         }
     },
     superclass: XtalDecor
 });
+document.head.appendChild(document.createElement('be-transformative'));
+/**
+ * Decrement "disabled" counter, remove when reaches 0
+ * @param prevSib
+ */
+function nudge(prevSib) {
+    const da = prevSib.getAttribute('disabled');
+    if (da !== null) {
+        if (da.length === 0 || da === "1") {
+            prevSib.removeAttribute('disabled');
+            prevSib.disabled = false;
+        }
+        else {
+            prevSib.setAttribute('disabled', (parseInt(da) - 1).toString());
+        }
+    }
+}
 //duplicated with be-observant
 function getHost(self) {
     let host = self.getRootNode().host;

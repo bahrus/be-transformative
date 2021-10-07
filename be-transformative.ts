@@ -65,12 +65,38 @@ const ce = new CE<XtalDecorCore<Element>>({
                         transform(target, aSelf.__ctx);
                         (<any>host).lastEvent = hostLastEvent;
                     }
-                }
+                };
+                self.addEventListener(propKey, fn);
+                if((<any>self).eventHandlers === undefined) (<any>self).eventHandlers = [];
+                (<any>self).eventHandlers.push({propKey, element: self, fn});
+                nudge(self);
             }
+        },
+        finale: (self: Element, target: Element) => {
+
         }
     },
     superclass: XtalDecor
 });
+
+document.head.appendChild(document.createElement('be-transformative'));
+
+/**
+ * Decrement "disabled" counter, remove when reaches 0
+ * @param prevSib 
+ */
+  function nudge(prevSib: Element) { //TODO:  Share with be-observant
+    const da = prevSib.getAttribute('disabled');
+    if (da !== null) {
+        if (da.length === 0 || da === "1") {
+            prevSib.removeAttribute('disabled');
+            (<any>prevSib).disabled = false;
+        }
+        else {
+            prevSib.setAttribute('disabled', (parseInt(da) - 1).toString());
+        }
+    }
+}
 
 //duplicated with be-observant
 function getHost(self:Element): HTMLElement{
