@@ -73,7 +73,11 @@ const ce = new CE<XtalDecorCore<Element>>({
             }
         },
         finale: (self: Element, target: Element) => {
-
+            const eventHandlers = (<any>self).eventHandlers;
+            //console.log(eventHandlers);
+            for(const eh of eventHandlers){
+                eh.element.removeEventListener(eh.propKey, eh.fn);
+            }
         }
     },
     superclass: XtalDecor
