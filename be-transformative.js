@@ -3,6 +3,8 @@ import { transform } from 'trans-render/lib/transform.js';
 import { CE } from 'trans-render/lib/CE.js';
 import { PE } from 'trans-render/lib/PE.js';
 import { SplitText } from 'trans-render/lib/SplitText.js';
+import { nudge } from 'trans-render/lib/nudge.js';
+import { getHost } from 'trans-render/lib/getHost.js';
 const ce = new CE({
     config: {
         tagName: 'be-transformative',
@@ -83,30 +85,3 @@ const ce = new CE({
     superclass: XtalDecor
 });
 document.head.appendChild(document.createElement('be-transformative'));
-/**
- * Decrement "disabled" counter, remove when reaches 0
- * @param prevSib
- */
-function nudge(prevSib) {
-    const da = prevSib.getAttribute('disabled');
-    if (da !== null) {
-        if (da.length === 0 || da === "1") {
-            prevSib.removeAttribute('disabled');
-            prevSib.disabled = false;
-        }
-        else {
-            prevSib.setAttribute('disabled', (parseInt(da) - 1).toString());
-        }
-    }
-}
-//duplicated with be-observant
-function getHost(self) {
-    let host = self.getRootNode().host;
-    if (host === undefined) {
-        host = self.parentElement;
-        while (host && !host.localName.includes('-')) {
-            host = host.parentElement;
-        }
-    }
-    return host;
-}
