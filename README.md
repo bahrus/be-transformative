@@ -18,4 +18,8 @@ Example:
 }'></button>
 ```
 
+One potential objection to the syntax shown above is that JSON is quite finicky about allowed syntax, giving the developer a potentially frustrating experience.
+
+However, [a VSCode plugin](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) is available which provides syntax coloring and catches most JSON errors.
+
 <!--in contrast to be-transformed -- which uses capture, and transform is only inside that element.-->
