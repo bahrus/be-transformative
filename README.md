@@ -1,5 +1,10 @@
-# be-transformative [TODO]
+# be-transformative
 
+*be-transformative* is a custom element / DOM decorator that allows for css-like transformations to be performed on demand.
+
+The syntax the transformations are based on [declarative trans-render syntax](https://github.com/bahrus/trans-render).
+
+Example:
 
 ```html
 <button be-transformative='{
@@ -13,4 +18,4 @@
 }'></button>
 ```
 
-in contrast to be-transformed -- which uses capture, and transform is only inside that element.
+<!--in contrast to be-transformed -- which uses capture, and transform is only inside that element.-->
