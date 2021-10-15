@@ -32,7 +32,7 @@
   "dependencies": {
     "trans-render": "0.0.419",
     "be-decorated": "0.0.7",
-    "xtal-decor": "0.0.51"
+    "xtal-element": "0.0.443"
   },
   "devDependencies": {
     "xtal-test": "0.0.51",
