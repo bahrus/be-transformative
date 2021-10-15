@@ -14,10 +14,11 @@ export class BeTransformativeController implements BeTransformativeActions{
             const fn = (e: Event) => {
                 const pram = params[e.type];
                 let firstTime = false;
+                const host = getHost(proxy);
                 if(proxy.ctx === undefined){
                     firstTime = true;
                     proxy.qCache = new WeakMap<Element, {[key: string]: NodeListOf<Element>}>();
-                    const host = getHost(proxy);
+                    
                     proxy.ctx = {
                         match: pram.initTransform || pram.transform,
                         host,
@@ -40,18 +41,18 @@ export class BeTransformativeController implements BeTransformativeActions{
                         ]
                     };
                     proxy.ctx.ctx = proxy.ctx;
-                    if(!firstTime){
-                        proxy.ctx.match = pram.transform;
-                    }
-                    const hostLastEvent = (<any>host).lastEvent;
-                    (<any>host).lastEvent = e;
-                    const target = pram.transformFromClosest !== undefined ?
-                        proxy.closest(pram.transformFromClosest)
-                        : host.shadowRoot || host!;
-                    if(target === null) throw 'Could not locate target';
-                    transform(target, proxy.ctx);
-                    (<any>host).lastEvent = hostLastEvent;
                 }
+                if(!firstTime){
+                    proxy.ctx.match = pram.transform;
+                }
+                const hostLastEvent = (<any>host).lastEvent;
+                (<any>host).lastEvent = e;
+                const target = pram.transformFromClosest !== undefined ?
+                    proxy.closest(pram.transformFromClosest)
+                    : host.shadowRoot || host!;
+                if(target === null) throw 'Could not locate target';
+                transform(target, proxy.ctx);
+                (<any>host).lastEvent = hostLastEvent;
             };
             proxy.addEventListener(paramKey, fn);
             if(proxy.eventHandlers === undefined) proxy.eventHandlers = [];

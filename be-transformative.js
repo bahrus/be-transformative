@@ -12,10 +12,10 @@ export class BeTransformativeController {
             const fn = (e) => {
                 const pram = params[e.type];
                 let firstTime = false;
+                const host = getHost(proxy);
                 if (proxy.ctx === undefined) {
                     firstTime = true;
                     proxy.qCache = new WeakMap();
-                    const host = getHost(proxy);
                     proxy.ctx = {
                         match: pram.initTransform || pram.transform,
                         host,
@@ -38,19 +38,19 @@ export class BeTransformativeController {
                         ]
                     };
                     proxy.ctx.ctx = proxy.ctx;
-                    if (!firstTime) {
-                        proxy.ctx.match = pram.transform;
-                    }
-                    const hostLastEvent = host.lastEvent;
-                    host.lastEvent = e;
-                    const target = pram.transformFromClosest !== undefined ?
-                        proxy.closest(pram.transformFromClosest)
-                        : host.shadowRoot || host;
-                    if (target === null)
-                        throw 'Could not locate target';
-                    transform(target, proxy.ctx);
-                    host.lastEvent = hostLastEvent;
                 }
+                if (!firstTime) {
+                    proxy.ctx.match = pram.transform;
+                }
+                const hostLastEvent = host.lastEvent;
+                host.lastEvent = e;
+                const target = pram.transformFromClosest !== undefined ?
+                    proxy.closest(pram.transformFromClosest)
+                    : host.shadowRoot || host;
+                if (target === null)
+                    throw 'Could not locate target';
+                transform(target, proxy.ctx);
+                host.lastEvent = hostLastEvent;
             };
             proxy.addEventListener(paramKey, fn);
             if (proxy.eventHandlers === undefined)
