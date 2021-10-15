@@ -1,9 +1,11 @@
-import {EventHandler} from 'be-decorated/types';
+import {EventHandler, BeDecoratedProps} from 'be-decorated/types';
 import {RenderContext} from 'trans-render/lib/types';
 
 export interface ITransform{
     
 }
+
+// type transformRule = {[key: ElementEventMap]: any};
 
 export interface BeTransformativeVirtualProps{
     eventHandlers: EventHandler[];
@@ -17,5 +19,6 @@ export interface BeTransformativeProps extends BeTransformativeVirtualProps{
 }
 
 export interface BeTransformativeActions{
-
+    intro(proxy: Element & BeTransformativeVirtualProps, target: Element, beDecorProps: BeDecoratedProps): void;
+    finale(proxy: Element & BeTransformativeVirtualProps, target:Element): void;
 }
