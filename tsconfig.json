@@ -9,7 +9,7 @@
 		"strict": true,
 	},
 	"files":[
-		"be-transformative2.ts"
+		"be-transformative.ts"
 	],
 	"exclude":[
 		"build",
