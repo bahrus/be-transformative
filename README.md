@@ -2,7 +2,7 @@
 
 *be-transformative* is a custom element / DOM decorator that allows for css-like transformations to be performed on demand.
 
-The syntax the transformations are based on [declarative trans-render syntax](https://github.com/bahrus/trans-render).
+The syntax for the transformations are based on [declarative trans-render syntax](https://github.com/bahrus/trans-render).
 
 Example:
 
