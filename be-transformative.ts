@@ -73,12 +73,16 @@ export interface BeTransformativeController extends BeTransformativeProps{}
 
 const tagName = 'be-transformative';
 
+const ifWantsToBe = 'transformative';
+
+const upgrade = '*';
+
 define<BeTransformativeProps & BeDecoratedProps<BeTransformativeProps, BeTransformativeActions>, BeTransformativeActions>({
     config:{
         tagName,
         propDefaults:{
-            upgrade: '*',
-            ifWantsToBe: 'transformative',
+            upgrade,
+            ifWantsToBe,
             noParse: true,
             forceVisible: true,
             virtualProps: ['eventHandlers', 'ctx', 'firstTime', 'qCache'],
@@ -90,4 +94,15 @@ define<BeTransformativeProps & BeDecoratedProps<BeTransformativeProps, BeTransfo
         controller: BeTransformativeController
     }
 });
-document.head.appendChild(document.createElement(tagName));
+const beHive = document.querySelector('be-hive') as any;
+if(beHive !== null){
+    customElements.whenDefined(beHive.localName).then(() => {
+        beHive.register({
+            ifWantsToBe,
+            upgrade,
+            localName: tagName,
+        })
+    })
+}else{
+    document.head.appendChild(document.createElement(tagName));
+}

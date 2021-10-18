@@ -68,12 +68,14 @@ export class BeTransformativeController {
     }
 }
 const tagName = 'be-transformative';
+const ifWantsToBe = 'transformative';
+const upgrade = '*';
 define({
     config: {
         tagName,
         propDefaults: {
-            upgrade: '*',
-            ifWantsToBe: 'transformative',
+            upgrade,
+            ifWantsToBe,
             noParse: true,
             forceVisible: true,
             virtualProps: ['eventHandlers', 'ctx', 'firstTime', 'qCache'],
@@ -85,4 +87,16 @@ define({
         controller: BeTransformativeController
     }
 });
-document.head.appendChild(document.createElement(tagName));
+const beHive = document.querySelector('be-hive');
+if (beHive !== null) {
+    customElements.whenDefined(beHive.localName).then(() => {
+        beHive.register({
+            ifWantsToBe,
+            upgrade,
+            localName: tagName,
+        });
+    });
+}
+else {
+    document.head.appendChild(document.createElement(tagName));
+}
