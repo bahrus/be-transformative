@@ -2,7 +2,7 @@ import {BeDecoratedProps, define} from 'be-decorated/be-decorated.js';
 import {BeTransformativeActions, BeTransformativeProps, BeTransformativeVirtualProps} from './types';
 import { getHost } from 'trans-render/lib/getHost.js';
 import { transform } from 'trans-render/lib/transform.js';
-import { PE } from 'trans-render/lib/PE.js';
+import { PEA } from 'trans-render/lib/PEA.js';
 import { SplitText } from 'trans-render/lib/SplitText.js';
 import { nudge } from 'trans-render/lib/nudge.js';
 
@@ -27,7 +27,7 @@ export class BeTransformativeController implements BeTransformativeActions{
                             {
                                 rhsType: Array,
                                 rhsHeadType: Object,
-                                ctor: PE
+                                ctor: PEA
                             },
                             {
                                 rhsType: Array,

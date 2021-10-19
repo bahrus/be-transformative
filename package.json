@@ -30,9 +30,9 @@
     "doc": "custom-elements-manifest analyze"
   },
   "dependencies": {
-    "trans-render": "0.0.422",
+    "trans-render": "0.0.424",
     "be-decorated": "0.0.19",
-    "xtal-element": "0.0.448"
+    "xtal-element": "0.0.449"
   },
   "devDependencies": {
     "xtal-test": "0.0.51",
