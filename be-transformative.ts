@@ -5,6 +5,7 @@ import { transform } from 'trans-render/lib/transform.js';
 import { PEA } from 'trans-render/lib/PEA.js';
 import { SplitText } from 'trans-render/lib/SplitText.js';
 import { nudge } from 'trans-render/lib/nudge.js';
+import {register} from 'be-hive/register.js';
 
 export class BeTransformativeController implements BeTransformativeActions{
     intro(proxy: Element & BeTransformativeVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
@@ -94,15 +95,5 @@ define<BeTransformativeProps & BeDecoratedProps<BeTransformativeProps, BeTransfo
         controller: BeTransformativeController
     }
 });
-const beHive = document.querySelector('be-hive') as any;
-if(beHive !== null){
-    customElements.whenDefined(beHive.localName).then(() => {
-        beHive.register({
-            ifWantsToBe,
-            upgrade,
-            localName: tagName,
-        })
-    })
-}else{
-    document.head.appendChild(document.createElement(tagName));
-}
+
+register(ifWantsToBe, upgrade, tagName);
