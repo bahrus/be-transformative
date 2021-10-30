@@ -31,9 +31,9 @@
   },
   "dependencies": {
     "trans-render": "0.0.425",
-    "be-decorated": "0.0.32",
-    "be-hive": "0.0.7",
-    "xtal-element": "0.0.451"
+    "be-decorated": "0.0.35",
+    "be-hive": "0.0.8",
+    "xtal-element": "0.0.452"
   },
   "devDependencies": {
     "xtal-test": "0.0.51",
