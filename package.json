@@ -30,8 +30,8 @@
     "doc": "custom-elements-manifest analyze"
   },
   "dependencies": {
-    "trans-render": "0.0.427",
-    "be-decorated": "0.0.36",
+    "trans-render": "0.0.428",
+    "be-decorated": "0.0.37",
     "be-hive": "0.0.8",
     "xtal-element": "0.0.452"
   },
