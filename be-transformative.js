@@ -13,7 +13,7 @@ export class BeTransformativeController {
             const fn = (e) => {
                 const pram = params[e.type];
                 let firstTime = false;
-                const host = getHost(proxy);
+                const host = getHost(proxy, true);
                 if (proxy.ctx === undefined) {
                     firstTime = true;
                     proxy.qCache = new WeakMap();

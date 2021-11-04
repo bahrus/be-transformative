@@ -15,7 +15,7 @@ export class BeTransformativeController implements BeTransformativeActions{
             const fn = (e: Event) => {
                 const pram = params[e.type];
                 let firstTime = false;
-                const host = getHost(proxy);
+                const host = getHost(proxy, true) as HTMLElement;
                 if(proxy.ctx === undefined){
                     firstTime = true;
                     proxy.qCache = new WeakMap<Element, {[key: string]: NodeListOf<Element>}>();
