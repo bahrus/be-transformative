@@ -53,12 +53,20 @@ export class BeTransformativeController {
                 transform(target, proxy.ctx);
                 host.lastEvent = hostLastEvent;
             };
-            proxy.addEventListener(paramKey, fn);
-            if (proxy.eventHandlers === undefined)
-                proxy.eventHandlers = [];
-            const on = paramKey;
-            proxy.eventHandlers.push({ on, elementToObserve: proxy, fn });
-            nudge(proxy);
+            if (paramKey === '') {
+                const ev = {
+                    type: '',
+                };
+                fn(ev);
+            }
+            else {
+                proxy.addEventListener(paramKey, fn);
+                if (proxy.eventHandlers === undefined)
+                    proxy.eventHandlers = [];
+                const on = paramKey;
+                proxy.eventHandlers.push({ on, elementToObserve: proxy, fn });
+                nudge(proxy);
+            }
         }
     }
     finale(proxy, target) {

@@ -55,11 +55,19 @@ export class BeTransformativeController implements BeTransformativeActions{
                 transform(target, proxy.ctx);
                 (<any>host).lastEvent = hostLastEvent;
             };
-            proxy.addEventListener(paramKey, fn);
-            if(proxy.eventHandlers === undefined) proxy.eventHandlers = [];
-            const on = paramKey as any as keyof ElementEventMap;
-            proxy.eventHandlers.push({on, elementToObserve: proxy, fn});
-            nudge(proxy);
+            if(paramKey === ''){
+                const ev: Partial<Event> = {
+                    type: '',
+                }
+                fn(ev as Event);
+            }else{
+                proxy.addEventListener(paramKey, fn);
+                if(proxy.eventHandlers === undefined) proxy.eventHandlers = [];
+                const on = paramKey as any as keyof ElementEventMap;
+                proxy.eventHandlers.push({on, elementToObserve: proxy, fn});
+                nudge(proxy);
+            }
+
         }
     }
     finale(proxy: Element & BeTransformativeVirtualProps, target:Element){
