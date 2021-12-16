@@ -86,7 +86,6 @@ define({
             upgrade,
             ifWantsToBe,
             noParse: true,
-            forceVisible: true,
             virtualProps: ['eventHandlers', 'ctx', 'firstTime', 'qCache'],
             intro: 'intro',
             finale: 'finale',

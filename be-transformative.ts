@@ -93,7 +93,6 @@ define<BeTransformativeProps & BeDecoratedProps<BeTransformativeProps, BeTransfo
             upgrade,
             ifWantsToBe,
             noParse: true,
-            forceVisible: true,
             virtualProps: ['eventHandlers', 'ctx', 'firstTime', 'qCache'],
             intro: 'intro',
             finale: 'finale',
