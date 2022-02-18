@@ -22,6 +22,8 @@ One potential objection to the syntax shown above is that JSON is quite finicky 
 
 However, [a VSCode plugin](https://marketplace.visualstudio.com/items?itemName=andersonbruceb.json-in-html) is available which provides syntax coloring and catches most JSON errors.
 
+And the [may-it-be compiler](https://github.com/bahrus/may-it-be) allows us to use *.mjs/*.mts files as our editing canvas, and compile to syntax as shown above.
+
 ## Running a transform immediately.
 
 This can be useful for hydrating
