@@ -31,7 +31,7 @@ export class BeTransformativeController implements BeTransformativeActions{
                     : host.shadowRoot || host!;
                 if(target === null) throw 'Could not locate target';
                 const {DTR} = await import('trans-render/lib/DTR.js');
-                DTR.transform(target, proxy.ctx);
+                await DTR.transform(target, proxy.ctx);
                 (<any>host).lastEvent = hostLastEvent;
             };
             if(paramKey === ''){

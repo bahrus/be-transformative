@@ -29,7 +29,7 @@ export class BeTransformativeController {
                 if (target === null)
                     throw 'Could not locate target';
                 const { DTR } = await import('trans-render/lib/DTR.js');
-                DTR.transform(target, proxy.ctx);
+                await DTR.transform(target, proxy.ctx);
                 host.lastEvent = hostLastEvent;
             };
             if (paramKey === '') {
