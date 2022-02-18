@@ -2,7 +2,8 @@ import {EventHandler, BeDecoratedProps} from 'be-decorated/types';
 import {RenderContext} from 'trans-render/lib/types';
 
 export interface ITransform{
-    
+    transform: any | any[],
+    transformPlugins?: any,
 }
 
 // type transformRule = {[key: ElementEventMap]: any};

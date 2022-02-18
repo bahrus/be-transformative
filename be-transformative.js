@@ -1,42 +1,20 @@
 import { define } from 'be-decorated/be-decorated.js';
-import { getHost } from 'trans-render/lib/getHost.js';
-import { transform } from 'trans-render/lib/transform.js';
-import { PEA } from 'trans-render/lib/PEA.js';
-import { SplitText } from 'trans-render/lib/SplitText.js';
-import { nudge } from 'trans-render/lib/nudge.js';
 import { register } from 'be-hive/register.js';
 export class BeTransformativeController {
-    intro(proxy, target, beDecorProps) {
+    async intro(proxy, target, beDecorProps) {
         const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe));
         for (const paramKey in params) {
-            //const pram = params[paramKey];
-            const fn = (e) => {
+            const fn = async (e) => {
                 const pram = params[e.type];
                 let firstTime = false;
+                const { getHost } = await import('trans-render/lib/getHost.js');
                 const host = getHost(proxy, true);
                 if (proxy.ctx === undefined) {
                     firstTime = true;
-                    proxy.qCache = new WeakMap();
                     proxy.ctx = {
-                        match: pram.initTransform || pram.transform,
+                        match: pram.transform,
                         host,
-                        queryCache: proxy.qCache,
-                        postMatch: [
-                            {
-                                rhsType: Array,
-                                rhsHeadType: Object,
-                                ctor: PEA
-                            },
-                            {
-                                rhsType: Array,
-                                rhsHeadType: String,
-                                ctor: SplitText
-                            },
-                            {
-                                rhsType: String,
-                                ctor: SplitText,
-                            }
-                        ]
+                        plugins: pram.transformPlugins,
                     };
                     proxy.ctx.ctx = proxy.ctx;
                 }
@@ -50,7 +28,8 @@ export class BeTransformativeController {
                     : host.shadowRoot || host;
                 if (target === null)
                     throw 'Could not locate target';
-                transform(target, proxy.ctx);
+                const { DTR } = await import('trans-render/lib/DTR.js');
+                DTR.transform(target, proxy.ctx);
                 host.lastEvent = hostLastEvent;
             };
             if (paramKey === '') {
@@ -65,6 +44,7 @@ export class BeTransformativeController {
                     proxy.eventHandlers = [];
                 const on = paramKey;
                 proxy.eventHandlers.push({ on, elementToObserve: proxy, fn });
+                const { nudge } = await import('trans-render/lib/nudge.js');
                 nudge(proxy);
             }
         }
