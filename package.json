@@ -32,6 +32,7 @@
     "trans-render": "0.0.511",
     "be-decorated": "0.0.89",
     "be-hive": "0.0.36",
+    "flipping": "1.1.0",
     "xtal-element": "0.0.484"
   },
   "devDependencies": {

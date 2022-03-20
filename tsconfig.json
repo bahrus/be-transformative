@@ -9,7 +9,8 @@
 		"strict": true,
 	},
 	"files":[
-		"be-transformative.ts"
+		"be-transformative.ts",
+		"flipping/index.ts"
 	],
 	"exclude":[
 		"build",
