@@ -1,8 +1,18 @@
 import { define } from 'be-decorated/be-decorated.js';
+import { getVal } from 'be-decorated/upgrade.js';
 import { register } from 'be-hive/register.js';
 export class BeTransformativeController {
     async intro(proxy, target, beDecorProps) {
-        const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe));
+        let params;
+        if (beDecorProps.virtualPropsMap.has(target) !== undefined) {
+            params = beDecorProps.virtualPropsMap.get(target);
+        }
+        if (params === undefined) {
+            const val = getVal(target, beDecorProps.ifWantsToBe);
+            const attr = val[0];
+            params = JSON.parse(attr);
+            beDecorProps.virtualPropsMap.set(target, params);
+        }
         for (const paramKey in params) {
             const fn = async (e) => {
                 const pram = params[e.type];
@@ -29,6 +39,9 @@ export class BeTransformativeController {
                 if (target === null)
                     throw 'Could not locate target';
                 const { DTR } = await import('trans-render/lib/DTR.js');
+                if (target.dataset.useFlip) {
+                    const { Flipping } = await import('./flipping/index.js');
+                }
                 await DTR.transform(target, proxy.ctx);
                 host.lastEvent = hostLastEvent;
             };

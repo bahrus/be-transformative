@@ -1,10 +1,20 @@
 import {BeDecoratedProps, define} from 'be-decorated/be-decorated.js';
+import {getVal} from 'be-decorated/upgrade.js';
 import {BeTransformativeActions, BeTransformativeProps, BeTransformativeVirtualProps} from './types';
 import {register} from 'be-hive/register.js';
 
 export class BeTransformativeController implements BeTransformativeActions{
     async intro(proxy: Element & BeTransformativeVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
-        const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe)!);
+        let params: any;
+        if(beDecorProps.virtualPropsMap.has(target) !== undefined){
+            params = beDecorProps.virtualPropsMap.get(target);
+        }
+        if(params === undefined){
+            const val = getVal(target, beDecorProps.ifWantsToBe);
+            const attr = val[0]!;
+            params = JSON.parse(attr);
+            beDecorProps.virtualPropsMap.set(target, params);
+        }
         
         for(const paramKey in params){
             const fn = async (e: Event) => {
