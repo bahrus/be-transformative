@@ -39,9 +39,9 @@ export class BeTransformativeController {
                 if (target === null)
                     throw 'Could not locate target';
                 const { DTR } = await import('trans-render/lib/DTR.js');
-                if (target.dataset.useFlip) {
-                    const { Flipping } = await import('./flipping/index.js');
-                }
+                // if(target.dataset.useFlip){
+                //     const {Flipping} = await import('./flipping/index.js');
+                // }
                 await DTR.transform(target, proxy.ctx);
                 host.lastEvent = hostLastEvent;
             };
