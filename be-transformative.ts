@@ -1,11 +1,11 @@
 import {BeDecoratedProps, define} from 'be-decorated/be-decorated.js';
-import {doParse} from 'be-decorated/doParse.js';
 import {BeTransformativeActions, BeTransformativeProps, BeTransformativeVirtualProps} from './types';
 import {register} from 'be-hive/register.js';
 
 export class BeTransformativeController implements BeTransformativeActions{
     async intro(proxy: Element & BeTransformativeVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
-        const params = doParse(target, beDecorProps);
+        const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe)!);
+        
         for(const paramKey in params){
             const fn = async (e: Event) => {
                 const pram = params[e.type];

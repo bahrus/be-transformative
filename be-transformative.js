@@ -1,9 +1,8 @@
 import { define } from 'be-decorated/be-decorated.js';
-import { doParse } from 'be-decorated/doParse.js';
 import { register } from 'be-hive/register.js';
 export class BeTransformativeController {
     async intro(proxy, target, beDecorProps) {
-        const params = doParse(target, beDecorProps);
+        const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe));
         for (const paramKey in params) {
             const fn = async (e) => {
                 const pram = params[e.type];
