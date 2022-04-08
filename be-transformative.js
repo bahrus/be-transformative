@@ -1,18 +1,9 @@
 import { define } from 'be-decorated/be-decorated.js';
-import { getVal } from 'be-decorated/upgrade.js';
+import { doParse } from 'be-decorated/doParse.js';
 import { register } from 'be-hive/register.js';
 export class BeTransformativeController {
     async intro(proxy, target, beDecorProps) {
-        let params;
-        if (beDecorProps.virtualPropsMap.has(target) !== undefined) {
-            params = beDecorProps.virtualPropsMap.get(target);
-        }
-        if (params === undefined) {
-            const val = getVal(target, beDecorProps.ifWantsToBe);
-            const attr = val[0];
-            params = JSON.parse(attr);
-            beDecorProps.virtualPropsMap.set(target, params);
-        }
+        const params = doParse(target, beDecorProps);
         for (const paramKey in params) {
             const fn = async (e) => {
                 const pram = params[e.type];
