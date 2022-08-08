@@ -2,6 +2,8 @@
 
 *be-transformative* is a custom element / DOM decorator that allows for css-like transformations to be performed on demand.
 
+<a href="https://nodei.co/npm/be-transformative/"><img src="https://nodei.co/npm/be-transformative.png"></a>
+
 The syntax for the transformations are based on [declarative trans-render syntax](https://github.com/bahrus/trans-render).
 
 Example:
