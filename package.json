@@ -25,15 +25,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "package-check": "package-check",
-    "serve": "node node_modules/xtal-test/serve.js",
+    "serve": "node node_modules/may-it-serve/serve.js",
     "doc": "custom-elements-manifest analyze"
   },
   "dependencies": {
-    "trans-render": "0.0.562",
+    "trans-render": "0.0.564",
     "be-decorated": "0.0.131",
-    "be-hive": "0.0.52",
-    "flipping": "1.1.0",
-    "xtal-element": "0.0.502"
+    "be-hive": "0.0.54",
+    "flipping": "1.1.0"
   },
   "devDependencies": {
     "may-it-serve": "0.0.2",

@@ -8,7 +8,7 @@ export class BeTransformativeController {
                 const pram = params[e.type];
                 let firstTime = false;
                 const { getHost } = await import('trans-render/lib/getHost.js');
-                const host = getHost(proxy, true);
+                const host = (getHost(proxy, true) || document);
                 if (proxy.ctx === undefined) {
                     firstTime = true;
                     proxy.ctx = {

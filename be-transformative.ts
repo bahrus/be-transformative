@@ -11,7 +11,7 @@ export class BeTransformativeController implements BeTransformativeActions{
                 const pram = params[e.type];
                 let firstTime = false;
                 const {getHost} = await import('trans-render/lib/getHost.js');
-                const host = getHost(proxy, true) as HTMLElement;
+                const host = (getHost(proxy, true) || document) as HTMLElement;
                 if(proxy.ctx === undefined){
                     firstTime = true;
                     proxy.ctx = {
