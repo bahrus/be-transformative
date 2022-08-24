@@ -29,9 +29,9 @@
     "doc": "custom-elements-manifest analyze"
   },
   "dependencies": {
-    "trans-render": "0.0.564",
-    "be-decorated": "0.0.131",
-    "be-hive": "0.0.54",
+    "trans-render": "0.0.574",
+    "be-decorated": "0.0.133",
+    "be-hive": "0.0.56",
     "flipping": "1.1.0"
   },
   "devDependencies": {
