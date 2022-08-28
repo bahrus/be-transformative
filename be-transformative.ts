@@ -2,7 +2,7 @@ import {BeDecoratedProps, define} from 'be-decorated/be-decorated.js';
 import {BeTransformativeActions, BeTransformativeProps, BeTransformativeVirtualProps} from './types';
 import {register} from 'be-hive/register.js';
 
-export class BeTransformativeController implements BeTransformativeActions{
+export class BeTransformativeController extends EventTarget implements BeTransformativeActions{
     async intro(proxy: Element & BeTransformativeVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
         const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe)!);
         
@@ -52,6 +52,8 @@ export class BeTransformativeController implements BeTransformativeActions{
             }
 
         }
+
+        proxy.resolved = true;
     }
     finale(proxy: Element & BeTransformativeVirtualProps, target:Element){
         const eventHandlers = proxy.eventHandlers;

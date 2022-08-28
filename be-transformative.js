@@ -1,6 +1,6 @@
 import { define } from 'be-decorated/be-decorated.js';
 import { register } from 'be-hive/register.js';
-export class BeTransformativeController {
+export class BeTransformativeController extends EventTarget {
     async intro(proxy, target, beDecorProps) {
         const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe));
         for (const paramKey in params) {
@@ -51,6 +51,7 @@ export class BeTransformativeController {
                 nudge(proxy);
             }
         }
+        proxy.resolved = true;
     }
     finale(proxy, target) {
         const eventHandlers = proxy.eventHandlers;

@@ -1,4 +1,4 @@
-import {EventHandler, BeDecoratedProps} from 'be-decorated/types';
+import {EventHandler, BeDecoratedProps, MinimalProxy} from 'be-decorated/types';
 import {RenderContext} from 'trans-render/lib/types';
 
 export interface ITransform{
@@ -8,7 +8,7 @@ export interface ITransform{
 
 // type transformRule = {[key: ElementEventMap]: any};
 
-export interface BeTransformativeVirtualProps{
+export interface BeTransformativeVirtualProps extends MinimalProxy{
     eventHandlers: EventHandler[];
     ctx: RenderContext;
     firstTime: boolean;
