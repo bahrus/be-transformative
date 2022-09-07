@@ -6,20 +6,27 @@ export interface ITransform{
     transformPlugins?: any,
 }
 
-// type transformRule = {[key: ElementEventMap]: any};
+export interface EndUserProps{
 
-export interface BeTransformativeVirtualProps extends MinimalProxy{
-    eventHandlers: EventHandler[];
+}
+
+
+export interface VirtualProps extends EndUserProps, MinimalProxy{
+    //eventHandlers: EventHandler[];
     ctx: RenderContext;
     firstTime: boolean;
-    qCache: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
+    //qCache: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
 }
 
-export interface BeTransformativeProps extends BeTransformativeVirtualProps{
-    proxy: Element & BeTransformativeVirtualProps;
+export type Proxy = Element & VirtualProps;
+
+export interface ProxyProps extends VirtualProps{
+    proxy: Proxy;
 }
 
-export interface BeTransformativeActions{
-    intro(proxy: Element & BeTransformativeVirtualProps, target: Element, beDecorProps: BeDecoratedProps): void;
-    finale(proxy: Element & BeTransformativeVirtualProps, target:Element): void;
+export type PP = ProxyProps;
+
+export interface Actions{
+    intro(proxy:Proxy, target: Element, beDecorProps: BeDecoratedProps): void;
+    finale(proxy: Proxy, target:Element): void;
 }

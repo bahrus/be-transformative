@@ -1,9 +1,10 @@
 import {BeDecoratedProps, define} from 'be-decorated/be-decorated.js';
-import {BeTransformativeActions, BeTransformativeProps, BeTransformativeVirtualProps} from './types';
+import {Actions, Proxy, PP, VirtualProps} from './types';
 import {register} from 'be-hive/register.js';
 
-export class BeTransformativeController extends EventTarget implements BeTransformativeActions{
-    async intro(proxy: Element & BeTransformativeVirtualProps, target: Element, beDecorProps: BeDecoratedProps){
+export class BeTransformativeController extends EventTarget implements Actions{
+    #abortControllers: AbortController[] = [];
+    async intro(proxy: Proxy, target: Element, beDecorProps: BeDecoratedProps){
         const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe)!);
         
         for(const paramKey in params){
@@ -43,10 +44,12 @@ export class BeTransformativeController extends EventTarget implements BeTransfo
                 }
                 fn(ev as Event);
             }else{
-                proxy.addEventListener(paramKey, fn);
-                if(proxy.eventHandlers === undefined) proxy.eventHandlers = [];
+                const ac = new AbortController();
+                this.#abortControllers.push(ac);
+                proxy.addEventListener(paramKey, fn, {
+                    signal: ac.signal,
+                });
                 const on = paramKey as any as keyof ElementEventMap;
-                proxy.eventHandlers.push({on, elementToObserve: proxy, fn});
                 const {nudge} = await import('trans-render/lib/nudge.js');
                 nudge(proxy);
             }
@@ -55,15 +58,13 @@ export class BeTransformativeController extends EventTarget implements BeTransfo
 
         proxy.resolved = true;
     }
-    finale(proxy: Element & BeTransformativeVirtualProps, target:Element){
-        const eventHandlers = proxy.eventHandlers;
-        for(const eh of eventHandlers){
-            eh.elementToObserve.removeEventListener(eh.on, eh.fn);
+    finale(proxy: Proxy, target:Element){
+        for(const ac of this.#abortControllers){
+            ac.abort();
         }
     }
 }
 
-export interface BeTransformativeController extends BeTransformativeProps{}
 
 const tagName = 'be-transformative';
 
@@ -71,14 +72,14 @@ const ifWantsToBe = 'transformative';
 
 const upgrade = '*';
 
-define<BeTransformativeProps & BeDecoratedProps<BeTransformativeProps, BeTransformativeActions>, BeTransformativeActions>({
+define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
     config:{
         tagName,
         propDefaults:{
             upgrade,
             ifWantsToBe,
             noParse: true,
-            virtualProps: ['eventHandlers', 'ctx', 'firstTime', 'qCache'],
+            virtualProps: ['ctx', 'firstTime'],
             intro: 'intro',
             finale: 'finale',
         }

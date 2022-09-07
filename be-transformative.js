@@ -1,6 +1,7 @@
 import { define } from 'be-decorated/be-decorated.js';
 import { register } from 'be-hive/register.js';
 export class BeTransformativeController extends EventTarget {
+    #abortControllers = [];
     async intro(proxy, target, beDecorProps) {
         const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe));
         for (const paramKey in params) {
@@ -42,11 +43,12 @@ export class BeTransformativeController extends EventTarget {
                 fn(ev);
             }
             else {
-                proxy.addEventListener(paramKey, fn);
-                if (proxy.eventHandlers === undefined)
-                    proxy.eventHandlers = [];
+                const ac = new AbortController();
+                this.#abortControllers.push(ac);
+                proxy.addEventListener(paramKey, fn, {
+                    signal: ac.signal,
+                });
                 const on = paramKey;
-                proxy.eventHandlers.push({ on, elementToObserve: proxy, fn });
                 const { nudge } = await import('trans-render/lib/nudge.js');
                 nudge(proxy);
             }
@@ -54,9 +56,8 @@ export class BeTransformativeController extends EventTarget {
         proxy.resolved = true;
     }
     finale(proxy, target) {
-        const eventHandlers = proxy.eventHandlers;
-        for (const eh of eventHandlers) {
-            eh.elementToObserve.removeEventListener(eh.on, eh.fn);
+        for (const ac of this.#abortControllers) {
+            ac.abort();
         }
     }
 }
@@ -70,7 +71,7 @@ define({
             upgrade,
             ifWantsToBe,
             noParse: true,
-            virtualProps: ['eventHandlers', 'ctx', 'firstTime', 'qCache'],
+            virtualProps: ['ctx', 'firstTime'],
             intro: 'intro',
             finale: 'finale',
         }
