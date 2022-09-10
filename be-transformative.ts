@@ -53,6 +53,7 @@ export class BeTransformativeController extends EventTarget implements Actions{
         for(const ac of this.#controllers){
             ac.abort();
         }
+        this.#txs = new Map<string, ITx>();
     }
 }
 

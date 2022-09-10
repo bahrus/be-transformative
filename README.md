@@ -20,6 +20,11 @@ Example:
             ".tree-view-selector":[{"style": {"display":"inline-block"}}],
             ".text-view-selector": [{"style": {"display":"none"}}]
         }
+    },
+    "myProp:onSet":{
+        "transform":{
+            ...
+        }
     }
 }'></button>
 ```
