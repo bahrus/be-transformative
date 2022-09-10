@@ -1,9 +1,11 @@
 import {EventHandler, BeDecoratedProps, MinimalProxy} from 'be-decorated/types';
-import {RenderContext} from 'trans-render/lib/types';
+import {RenderContext, MatchRHS} from 'trans-render/lib/types';
 
 export interface ITransform{
-    transform: any | any[],
+    transform: {[key: string]: MatchRHS},
     transformPlugins?: any,
+    //transformFromClosest?: string,
+    flushCache?: boolean;
 }
 
 export interface EndUserProps{

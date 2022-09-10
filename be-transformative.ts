@@ -1,65 +1,56 @@
 import {BeDecoratedProps, define} from 'be-decorated/be-decorated.js';
-import {Actions, Proxy, PP, VirtualProps} from './types';
+import {Actions, Proxy, PP, VirtualProps, ITransform} from './types';
 import {register} from 'be-hive/register.js';
+import {IDIYNotify, MatchRHS, ITx} from 'trans-render/lib/types';
 
 export class BeTransformativeController extends EventTarget implements Actions{
-    #abortControllers: AbortController[] = [];
+    #controllers: AbortController[] = [];
+    #txs = new Map<string, ITx>();
+
     async intro(proxy: Proxy, target: Element, beDecorProps: BeDecoratedProps){
-        const params = JSON.parse(proxy.getAttribute('is-' + beDecorProps.ifWantsToBe)!);
-        
-        for(const paramKey in params){
-            const fn = async (e: Event) => {
-                const pram = params[e.type];
-                let firstTime = false;
-                const {getHost} = await import('trans-render/lib/getHost.js');
-                const host = (getHost(proxy, true) || document) as HTMLElement;
-                if(proxy.ctx === undefined){
-                    firstTime = true;
-                    proxy.ctx = {
-                        match: pram.transform,
-                        host,
-                        plugins: pram.transformPlugins,
-                    };
-                    proxy.ctx.ctx = proxy.ctx;
-                }
-                if(!firstTime){
-                    proxy.ctx.match = pram.transform;
-                }
-                const hostLastEvent = (<any>host).lastEvent;
-                (<any>host).lastEvent = e;
-                const target = pram.transformFromClosest !== undefined ?
-                    proxy.closest(pram.transformFromClosest)
-                    : host.shadowRoot || host!;
-                if(target === null) throw 'Could not locate target';
-                const {DTR} = await import('trans-render/lib/DTR.js');
-                // if(target.dataset.useFlip){
-                //     const {Flipping} = await import('./flipping/index.js');
-                // }
-                await DTR.transform(target, proxy.ctx);
-                (<any>host).lastEvent = hostLastEvent;
-            };
-            if(paramKey === ''){
-                const ev: Partial<Event> = {
-                    type: '',
-                }
-                fn(ev as Event);
-            }else{
-                const ac = new AbortController();
-                this.#abortControllers.push(ac);
-                proxy.addEventListener(paramKey, fn, {
-                    signal: ac.signal,
-                });
-                const on = paramKey as any as keyof ElementEventMap;
-                const {nudge} = await import('trans-render/lib/nudge.js');
-                nudge(proxy);
-            }
-
+        let params: any = undefined;
+        const attr = proxy.getAttribute('is-' + beDecorProps.ifWantsToBe!)!;
+        try{
+            params = JSON.parse(attr);
+        }catch(e){
+            console.error({
+                e,
+                attr
+            });
+            return;
         }
-
+        const {notifyHookup} =  await import('trans-render/lib/notifyHookup.js');
+        
+        this.#controllers = [];
+        for(const propKey in params){
+            const pram = params[propKey] as ITransform;
+            const {transform, } = pram;
+            const notifyParam: IDIYNotify = {
+                doOnly: async () => {
+                    const {getHost} = await import('trans-render/lib/getHost.js');
+                    const host = (getHost(proxy, true) || document) as HTMLElement;
+                    if(!this.#txs.has(propKey)){
+                        const {Tx} = await import('trans-render/lib/Tx.js');
+                        
+                        const tx = new Tx(host, target, transform!);
+                        this.#txs.set(propKey, tx);
+                    }
+                    const txs = this.#txs.get(propKey)!;
+                    // const node = transformFromClosest !== undefined ? target.closest(transformFromClosest): host.shadowRoot || host!;
+                    // if(node === null) throw 'Could not locate target';
+                    await txs.transform();
+                }, 
+                nudge: true
+            } as IDIYNotify;
+            const handler = await notifyHookup(target, propKey, notifyParam);
+            this.#controllers.push(handler.controller);
+        }
         proxy.resolved = true;
+
+
     }
     finale(proxy: Proxy, target:Element){
-        for(const ac of this.#abortControllers){
+        for(const ac of this.#controllers){
             ac.abort();
         }
     }
