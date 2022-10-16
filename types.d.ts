@@ -1,22 +1,23 @@
 import {EventHandler, BeDecoratedProps, MinimalProxy} from 'be-decorated/types';
-import {RenderContext, MatchRHS} from 'trans-render/lib/types';
+import {RenderContext, MatchRHS, Scope} from 'trans-render/lib/types';
 
-export interface ITransform{
+export interface ITransformConfig{
     transform: {[key: string]: MatchRHS},
     transformPlugins?: any,
+    scope: Scope,
     //transformFromClosest?: string,
     flushCache?: boolean;
 }
 
 export interface EndUserProps{
-
+    on?: {[key: string]: ITransformConfig}
 }
 
 
 export interface VirtualProps extends EndUserProps, MinimalProxy{
     //eventHandlers: EventHandler[];
-    ctx: RenderContext;
-    firstTime: boolean;
+    // ctx: RenderContext;
+    // firstTime: boolean;
     //qCache: WeakMap<Element, {[key: string]: NodeListOf<Element>}>;
 }
 
@@ -29,6 +30,6 @@ export interface ProxyProps extends VirtualProps{
 export type PP = ProxyProps;
 
 export interface Actions{
-    intro(proxy:Proxy, target: Element, beDecorProps: BeDecoratedProps): void;
+    onOn(pp: PP): Promise<void>;
     finale(proxy: Proxy, target:Element): void;
 }

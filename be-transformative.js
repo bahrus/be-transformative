@@ -3,31 +3,21 @@ import { register } from 'be-hive/register.js';
 export class BeTransformativeController extends EventTarget {
     #controllers = [];
     #txs = new Map();
-    async intro(proxy, target, beDecorProps) {
-        let params = undefined;
-        const attr = proxy.getAttribute('is-' + beDecorProps.ifWantsToBe);
-        try {
-            params = JSON.parse(attr);
-        }
-        catch (e) {
-            console.error({
-                e,
-                attr
-            });
-            return;
-        }
-        const { notifyHookup } = await import('trans-render/lib/notifyHookup.js');
+    async onOn(pp) {
+        const { on, self, proxy } = pp;
         this.#controllers = [];
-        for (const propKey in params) {
-            const pram = params[propKey];
-            const { transform, } = pram;
+        for (const propKey in on) {
+            const transformConfig = { ...on[propKey] };
+            if (transformConfig.scope === undefined)
+                transformConfig.scope = 'h';
+            const { transform, scope } = transformConfig;
             const notifyParam = {
                 doOnly: async () => {
                     const { getHost } = await import('trans-render/lib/getHost.js');
                     const host = (getHost(proxy, true) || document);
                     if (!this.#txs.has(propKey)) {
                         const { Tx } = await import('trans-render/lib/Tx.js');
-                        const tx = new Tx(host, target, transform);
+                        const tx = new Tx(host, self, transform, scope);
                         this.#txs.set(propKey, tx);
                     }
                     const txs = this.#txs.get(propKey);
@@ -37,16 +27,20 @@ export class BeTransformativeController extends EventTarget {
                 },
                 nudge: true
             };
-            const handler = await notifyHookup(target, propKey, notifyParam);
+            const { notifyHookup } = await import('trans-render/lib/notifyHookup.js');
+            const handler = await notifyHookup(self, propKey, notifyParam);
             this.#controllers.push(handler.controller);
         }
         proxy.resolved = true;
     }
-    finale(proxy, target) {
+    disconnect() {
         for (const ac of this.#controllers) {
             ac.abort();
         }
         this.#txs = new Map();
+    }
+    finale() {
+        this.disconnect();
     }
 }
 const tagName = 'be-transformative';
@@ -58,10 +52,13 @@ define({
         propDefaults: {
             upgrade,
             ifWantsToBe,
-            noParse: true,
-            virtualProps: ['ctx', 'firstTime'],
-            intro: 'intro',
+            virtualProps: ['on'],
             finale: 'finale',
+            primaryProp: 'on',
+            primaryPropReq: true,
+        },
+        actions: {
+            onOn: 'on'
         }
     },
     complexPropDefaults: {

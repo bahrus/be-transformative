@@ -1,5 +1,5 @@
 import {BeDecoratedProps, define} from 'be-decorated/be-decorated.js';
-import {Actions, Proxy, PP, VirtualProps, ITransform} from './types';
+import {Actions, Proxy, PP} from './types';
 import {register} from 'be-hive/register.js';
 import {IDIYNotify, MatchRHS, ITx} from 'trans-render/lib/types';
 
@@ -7,24 +7,15 @@ export class BeTransformativeController extends EventTarget implements Actions{
     #controllers: AbortController[] = [];
     #txs = new Map<string, ITx>();
 
-    async intro(proxy: Proxy, target: Element, beDecorProps: BeDecoratedProps){
-        let params: any = undefined;
-        const attr = proxy.getAttribute('is-' + beDecorProps.ifWantsToBe!)!;
-        try{
-            params = JSON.parse(attr);
-        }catch(e){
-            console.error({
-                e,
-                attr
-            });
-            return;
-        }
-        const {notifyHookup} =  await import('trans-render/lib/notifyHookup.js');
+    async onOn(pp: PP){
+        const {on, self, proxy} = pp;
+        
         
         this.#controllers = [];
-        for(const propKey in params){
-            const pram = params[propKey] as ITransform;
-            const {transform, } = pram;
+        for(const propKey in on){
+            const transformConfig = {...on[propKey]};
+            if(transformConfig.scope === undefined) transformConfig.scope = 'h';
+            const {transform, scope} = transformConfig;
             const notifyParam: IDIYNotify = {
                 doOnly: async () => {
                     const {getHost} = await import('trans-render/lib/getHost.js');
@@ -32,7 +23,7 @@ export class BeTransformativeController extends EventTarget implements Actions{
                     if(!this.#txs.has(propKey)){
                         const {Tx} = await import('trans-render/lib/Tx.js');
                         
-                        const tx = new Tx(host, target, transform!);
+                        const tx = new Tx(host, self, transform!, scope);
                         this.#txs.set(propKey, tx);
                     }
                     const txs = this.#txs.get(propKey)!;
@@ -42,18 +33,21 @@ export class BeTransformativeController extends EventTarget implements Actions{
                 }, 
                 nudge: true
             } as IDIYNotify;
-            const handler = await notifyHookup(target, propKey, notifyParam);
+            const {notifyHookup} =  await import('trans-render/lib/notifyHookup.js');
+            const handler = await notifyHookup(self, propKey, notifyParam);
             this.#controllers.push(handler.controller);
         }
         proxy.resolved = true;
 
-
     }
-    finale(proxy: Proxy, target:Element){
+    disconnect(){
         for(const ac of this.#controllers){
             ac.abort();
         }
         this.#txs = new Map<string, ITx>();
+    }
+    finale(){
+        this.disconnect();
     }
 }
 
@@ -70,10 +64,13 @@ define<Proxy & BeDecoratedProps<Proxy, Actions>, Actions>({
         propDefaults:{
             upgrade,
             ifWantsToBe,
-            noParse: true,
-            virtualProps: ['ctx', 'firstTime'],
-            intro: 'intro',
+            virtualProps: ['on'],
             finale: 'finale',
+            primaryProp: 'on',
+            primaryPropReq: true,
+        },
+        actions:{
+            onOn: 'on'
         }
     },
     complexPropDefaults:{
