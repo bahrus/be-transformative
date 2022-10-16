@@ -11,16 +11,18 @@
         <button be-transformative='{
             "click":{
                 "transform":{
-                    ":host": [{"open":true,"expandAll":true,"collapseAll":false,"propx": ".lastEvent.type"}]
+                    ":host": [{"open":true,"expandAll":true,"collapseAll":false,"propx": ".lastEvent.type"}],
+                    "details": {"open": "open"}
                 }
             }
         }'>Expand All</button>
+        <details>
+            <summary>test</summary>
+            hello
+        </details>
     </my-fake-host>
 
-    <details>
-        <summary>test</summary>
-        hello
-    </details>
+
     <script type=importmap>{
         "imports":{
             "trans-render/": "../node_modules/trans-render/",
