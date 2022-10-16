@@ -2,6 +2,8 @@
 
 *be-transformative* is a custom element / DOM decorator that allows for css-like transformations to be performed on demand.
 
+[![Playwright Tests](https://github.com/bahrus/be-transformative/actions/workflows/CI.yml/badge.svg?branch=baseline)](https://github.com/bahrus/be-transformative/actions/workflows/CI.yml)
+
 <a href="https://nodei.co/npm/be-transformative/"><img src="https://nodei.co/npm/be-transformative.png"></a>
 
 [![How big is this package in your project?](https://img.shields.io/bundlephobia/minzip/be-transformative?style=for-the-badge)](https://bundlephobia.com/result?p=be-transformative)
@@ -52,3 +54,28 @@ This can be useful for hydrating
 ```
 
 <!--in contrast to be-transformed -- which uses capture, and transform is only inside that element.-->
+
+## Viewing Locally
+
+1.  Install git.
+2.  Fork/clone this repo.
+3.  Install node.
+4.  Open command window to folder where you cloned this repo.
+5.  > npm install
+6.  > npm run serve
+7.  Open http://localhost:3030/demo/dev in a modern browser.
+
+## Importing in ES Modules:
+
+```JavaScript
+import 'be-exportable/be-transformative.js';
+```
+
+## Using from CDN:
+
+```html
+<script type=module crossorigin=anonymous>
+    import 'https://esm.run/be-transformative';
+</script>
+```
+
