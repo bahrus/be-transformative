@@ -3,7 +3,7 @@ import {RenderContext, MatchRHS, Scope} from 'trans-render/lib/types';
 
 export interface ITransformConfig{
     transform: {[key: string]: MatchRHS},
-    transformPlugins?: any,
+    plugins?: any,
     scope: Scope,
     //transformFromClosest?: string,
     flushCache?: boolean;
